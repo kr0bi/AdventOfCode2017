@@ -1,7 +1,7 @@
 #lang racket
 (define InvertCaptcha
   (lambda (captcha)
-    (sommaStringhe (StringCaptcha captcha))
+    (sommaStringhe (StringCaptcha_corretto captcha captcha))
     ))
 (define StringCaptcha
   (lambda (captcha)
@@ -15,6 +15,19 @@
                       (else (StringCaptcha k)))
         )))
   ))
+(define StringCaptcha_corretto
+  (lambda (captcha captcha2)
+    (let ((z (substring captcha2 0 1)))
+      (let ((x (substring captcha 0 1)))
+        (let ((k (substring captcha 1)))
+          ((cond ((= (string-length captcha) 1) 
+                  (if (string=? x z)
+                      (string-append x "")
+                      ""))
+                 ((string=? x (substring captcha 1 2)) (string-append x (StringCaptcha_corretto k captcha)))
+                 (else (StringCaptcha_corretto k captcha))) 
+      )))
+    ))
 (define verificaStringa
   (lambda (str i)
     (let ((x (substring str 0 1)))
